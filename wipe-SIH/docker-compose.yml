@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: wipechain_db
+    environment:
+      POSTGRES_DB: wipechain
+      POSTGRES_USER: wipechain
+      POSTGRES_PASSWORD: wipechain
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wipechain -d wipechain"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: wipechain_backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://wipechain:wipechain@db:5432/wipechain
+      JWT_SECRET_KEY: supersecretkeychangeinprod
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 120
+      CORS_ORIGINS: http://localhost:5173
+      ENV: development
+    volumes:
+      - ./backend/app:/app/app
+      - ./data:/app/data   # NEW: persist virtual wipe files
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: wipechain_frontend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
