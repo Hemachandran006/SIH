@@ -1,0 +1,13 @@
+timestamp,severity,source,event
+2024-01-15 08:15:23,INFO,192.168.1.50,User login successful
+2024-01-15 08:17:12,WARNING,192.168.1.100,Authentication failed
+2024-01-15 08:17:34,WARNING,192.168.1.100,Authentication failed
+2024-01-15 08:17:56,WARNING,192.168.1.100,Authentication failed
+2024-01-15 08:18:21,ERROR,192.168.1.100,Account locked due to multiple failed attempts
+2024-01-15 08:19:03,ERROR,database-01,Connection timeout
+2024-01-15 08:21:33,CRITICAL,10.0.0.666,Unauthorized access attempt
+2024-01-15 08:24:19,CRITICAL,172.16.0.250,SQL injection attempt detected
+2024-01-15 08:27:38,WARNING,app-server-01,High memory usage
+2024-01-15 08:31:29,CRITICAL,firewall,Exploit pattern detected
+2024-01-15 08:40:28,CRITICAL,192.168.1.80,DDoS attack suspected
+2024-01-15 08:48:56,CRITICAL,storage-server,Malware detected in file
